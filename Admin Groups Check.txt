@@ -1,0 +1,40 @@
+$path="C:\AdminGroups"
+
+if(Test-Path -Path $path){
+Write-Host "Path exist" -ForegroundColor Green
+
+
+}
+else{
+
+write-host "Path not exist" -ForegroundColor Red
+write-host "Path is creating" -ForegroundColoR Blue
+md $path
+}
+
+$date = Get-Date -UFormat %d%m%Y
+if(Test-Path -Path $path\$date){
+Write-Host "Path exist" -ForegroundColor Green
+
+
+}
+else{
+
+write-host "Path not exist" -ForegroundColor Red
+write-host "Path is creating" -ForegroundColoR Blue
+md $path\$date
+}
+
+$finalpath="$path\$date"
+
+
+$domainadmins=Get-ADGroupMember -Identity "Domain Admins" -Recursive |select name,samaccountname,objectClass | Export-Csv -Path "$finalpath\domainadmins.csv" -NoTypeInformation
+$enterpriseadmins=Get-ADGroupMember -Identity "Enterprise Admins" -Recursive |select name,samaccountname,objectClass| Export-Csv -Path "$finalpath\enterpriseadmins.csv" -NoTypeInformation
+$schemaadmins=Get-ADGroupMember -Identity "Schema Admins" -Recursive |select name,samaccountname,objectClass| Export-Csv -Path "$finalpath\schemaadmins.csv" -NoTypeInformation
+$administrators=Get-ADGroupMember -Identity "Administrators" -Recursive |select name,samaccountname,objectClass| Export-Csv -Path "$finalpath\administrators.csv" -NoTypeInformation
+$backupoperators=Get-ADGroupMember -Identity "Backup Operators" -Recursive |select name,samaccountname,objectClass| Export-Csv -Path "$finalpath\backupoperators.csv" -NoTypeInformation
+$printoperators=Get-ADGroupMember -Identity "Print Operators" -Recursive |select name,samaccountname,objectClass| Export-Csv -Path "$finalpath\printoperators.csv" -NoTypeInformation
+$serveroperators=Get-ADGroupMember -Identity "Server Operators" -Recursive |select name,samaccountname,objectClass| Export-Csv -Path "$finalpath\serveroperators.csv" -NoTypeInformation
+$gpocreator=Get-ADGroupMember -Identity "Group Policy Creator Owners" -Recursive |select name,samaccountname,objectClass| Export-Csv -Path "$finalpath\gpocreator.csv" -NoTypeInformation
+$protectedusers=Get-ADGroupMember -Identity "Protected Users" -Recursive |select name,samaccountname,objectClass| Export-Csv -Path "$finalpath\protectedusers.csv" -NoTypeInformation
+$emptygroup=Get-ADGroup -LDAPFilter "(!(member=*))" | select Name |  Export-Csv -Path "$finalpath\emptygroup.csv" -NoTypeInformation
